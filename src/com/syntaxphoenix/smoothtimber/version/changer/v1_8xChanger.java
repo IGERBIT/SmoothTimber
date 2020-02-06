@@ -23,7 +23,7 @@ public class v1_8xChanger implements VersionChanger {
 	public ItemStack removeDurabilityFromItem(ItemStack stack) {
 		Integer dur = Integer.valueOf(stack.getDurability() + 1);
 		if(stack.getType().getMaxDurability() < dur) {
-			stack.setType(Material.AIR);
+			stack.setAmount(0);
 			return null;
 		}
 		stack.setDurability(dur.shortValue());

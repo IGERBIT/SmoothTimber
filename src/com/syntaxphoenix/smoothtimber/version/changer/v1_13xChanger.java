@@ -27,7 +27,7 @@ public class v1_13xChanger implements VersionChanger {
 			Damageable dmg = (Damageable) meta;
 			int damage = dmg.getDamage() + 1;
 			if(stack.getType().getMaxDurability() - damage < 0) {
-				stack.setType(Material.AIR);
+				stack.setAmount(0);
 				return null;
 			}
 			dmg.setDamage(damage = dmg.getDamage() + 1);
