@@ -1,7 +1,6 @@
 package com.syntaxphoenix.smoothtimber.listener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -42,16 +41,18 @@ public class BlockBreakListener implements Listener {
 					public void run() {
 						ArrayList<Location> woodBlocks = new ArrayList<>();
 						Location bl = l;
-						for (int y = 0;; y++) {
-							List<Location> located = Locator.locateWood(
+						int prev = woodBlocks.size();
+						for (int y = 0; y < 256; y++) {
+							Locator.locateWood(
 									new Location(bl.getWorld(), bl.getBlockX(), bl.getBlockY() + y, bl.getBlockZ()),
 									woodBlocks);
-							if (located.isEmpty()) {
+							int size = woodBlocks.size();
+							if (size == prev) {
 								break;
 							}
-							woodBlocks.addAll(located);
+							prev = size;
 						}
-						if(SmoothTimber.triggerChopEvent(p, l, change, tool, woodBlocks)) {
+						if (SmoothTimber.triggerChopEvent(p, l, change, tool, woodBlocks)) {
 							return;
 						}
 						Bukkit.getScheduler().runTask(PluginUtils.m, new Runnable() {
@@ -65,7 +66,7 @@ public class BlockBreakListener implements Listener {
 										}
 										b.breakNaturally();
 									}
-									
+
 								}
 							}
 						});

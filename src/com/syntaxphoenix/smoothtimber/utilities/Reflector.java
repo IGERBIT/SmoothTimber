@@ -29,12 +29,12 @@ public class Reflector {
 		return getClass("org.bukkit.craftbukkit." + getServerVersion() + "." + cbClassString);
 	}
 	
-	public static Class<?> getBLClass(String blClassString){
+	public static Class<?> getBL1Class(String blClassString){
 		return getClass("com.syntaxphoenix.blocky." + blClassString);
 	}
 	
-	public static Class<?> getCPClass(String cpClassString){
-		return getClass("net.coreprotect." + cpClassString);
+	public static Class<?> getBL2Class(String blClassString){
+		return getClass("com.syntaxphoenix.blockylog." + blClassString);
 	}
 
 	public static Class<?> getClass(String classPath) {

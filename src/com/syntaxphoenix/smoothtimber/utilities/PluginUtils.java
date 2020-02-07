@@ -1,6 +1,7 @@
 package com.syntaxphoenix.smoothtimber.utilities;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.syntaxphoenix.smoothtimber.SmoothTimber;
@@ -38,9 +39,12 @@ public class PluginUtils {
 	 */
 
 	private void checkPlugins(PluginManager pm) {
-		if(pm.getPlugin("BlockyLog") != null) {
+		Plugin blocky;
+		if((blocky = pm.getPlugin("BlockyLog")) != null) {
 			if(CutterConfig.extension_blocky) {
 				Locator.blockylog = true;
+				Locator.version = Integer.parseInt(blocky.getDescription().getVersion().split("\\.")[0]);
+				Locator.generateReflect();
 			}
 		}
 	}
