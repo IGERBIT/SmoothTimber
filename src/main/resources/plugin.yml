@@ -1,4 +1,4 @@
-main: com.syntaxphoenix.smoothtimber.SmoothTimber
+main: com.syntaxphoenix.smoothtimber.spigot.SmoothTimber
 name: SmoothTimber
 author: Lauriichen & YellowPhoenix18
 version: 1.5.1
