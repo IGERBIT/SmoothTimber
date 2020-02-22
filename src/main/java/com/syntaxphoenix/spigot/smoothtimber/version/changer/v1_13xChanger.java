@@ -2,6 +2,10 @@ package com.syntaxphoenix.spigot.smoothtimber.version.changer;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -81,6 +85,23 @@ public class v1_13xChanger implements VersionChanger {
 	@Override
 	public ItemStack getAirItem() {
 		return new ItemStack(Material.AIR);
+	}
+
+	@Override
+	public Entity toFallingBlock(Block block) {
+		BlockData data = block.getBlockData();
+		block.setType(Material.AIR);
+		return block.getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0.2, 0.5), data);
+	}
+	
+	@Override
+	public EntityType getFallingBlockType() {
+		return EntityType.FALLING_BLOCK;
+	}
+
+	@Override
+	public void dropItemByFallingBlock(FallingBlock block) {
+		block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(block.getBlockData().getMaterial()));
 	}
 
 }

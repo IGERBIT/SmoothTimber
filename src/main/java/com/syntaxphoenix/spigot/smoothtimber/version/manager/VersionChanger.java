@@ -1,6 +1,9 @@
 package com.syntaxphoenix.spigot.smoothtimber.version.manager;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,5 +24,11 @@ public interface VersionChanger {
 	public ItemStack getItemInHand(Player p);
 
 	public ItemStack getAirItem();
+	
+	public Entity toFallingBlock(Block block);
+
+	public EntityType getFallingBlockType();
+
+	public void dropItemByFallingBlock(FallingBlock block);
 
 }

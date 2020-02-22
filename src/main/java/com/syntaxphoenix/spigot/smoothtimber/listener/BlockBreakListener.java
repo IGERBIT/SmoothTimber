@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.syntaxphoenix.spigot.smoothtimber.SmoothTimber;
 import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
@@ -64,9 +65,8 @@ public class BlockBreakListener implements Listener {
 										if (change.removeDurabilityFromItem(tool) == null) {
 											break;
 										}
-										b.breakNaturally();
+										change.toFallingBlock(b).setMetadata("STAnimate", new FixedMetadataValue(SmoothTimber.m, false));;
 									}
-
 								}
 							}
 						});
@@ -75,5 +75,4 @@ public class BlockBreakListener implements Listener {
 			}
 		}
 	}
-
 }

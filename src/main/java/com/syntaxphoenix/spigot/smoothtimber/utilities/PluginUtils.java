@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginManager;
 import com.syntaxphoenix.spigot.smoothtimber.SmoothTimber;
 import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
 import com.syntaxphoenix.spigot.smoothtimber.listener.BlockBreakListener;
+import com.syntaxphoenix.spigot.smoothtimber.listener.BlockFallListener;
 import com.syntaxphoenix.spigot.smoothtimber.stats.SyntaxPhoenixStats;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionExchanger;
@@ -52,6 +53,7 @@ public class PluginUtils {
 	private void registerListener() {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new BlockBreakListener(), SmoothTimber.m);
+		pm.registerEvents(new BlockFallListener(), SmoothTimber.m);
 		
 		checkPlugins(pm);
 	}
