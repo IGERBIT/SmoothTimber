@@ -19,11 +19,13 @@ public class CutterConfig {
 	public static boolean permissionsEnabled = false;
 	public static boolean onSneak = false;
 	public static List<String> cutterMaterials = new ArrayList<>();
+	public static int checkRadius = 3;
 	
 	public static void load() {
 		PluginUtils.changer.setupConfig();
 		extension_blocky = check("Extensions.BlockyLog", extension_blocky);
 		onSneak = check("Cutter.onlyWhileSneaking", onSneak);
+		checkRadius = check("Cutter.woodLocateRadius", checkRadius);
 		permissionsEnabled = check("Cutter.enablePermissions", permissionsEnabled);
 		cutterMaterials = check("Cutter.AxeMaterials", cutterMaterials);
 	}

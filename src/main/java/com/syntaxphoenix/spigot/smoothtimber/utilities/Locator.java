@@ -12,6 +12,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 import com.syntaxphoenix.syntaxapi.reflections.AbstractReflect;
 import com.syntaxphoenix.syntaxapi.reflections.Reflect;
@@ -24,26 +25,27 @@ public class Locator {
 	protected static int version = 0;
 
 	public static void locateWood(Location start, List<Location> current) {
+		int radius = CutterConfig.checkRadius;
 		if (blockylog) {
 			if (version == 1) {
-				locateBlocky1(start, current);
+				locateBlocky1(start, radius, current);
 			} else if (version == 2) {
-				locateBlocky2(start, current);
+				locateBlocky2(start, radius, current);
 			}
 		} else {
-			locateOnly(start, current);
+			locateOnly(start, radius, current);
 		}
 	}
 
-	private static void locateOnly(Location start, List<Location> current) {
+	private static void locateOnly(Location start, int radius, List<Location> current) {
 		VersionChanger change = PluginUtils.changer;
 		World w = start.getWorld();
 		int x = start.getBlockX();
 		int y = start.getBlockY();
 		int z = start.getBlockZ();
-
-		for (int cx = x - 3; cx <= x + 3; cx++) {
-			for (int cz = z - 3; cz <= z + 3; cz++) {
+		
+		for (int cx = x - radius; cx <= x + radius; cx++) {
+			for (int cz = z - radius; cz <= z + radius; cz++) {
 				boolean checkLoc = true;
 				if (cx == x && cz == z) {
 					checkLoc = false;
@@ -55,14 +57,14 @@ public class Locator {
 					}
 					current.add(l);
 					if (checkLoc) {
-						locateOnly(l, current);
+						locateOnly(l, radius, current);
 					}
 				}
 			}
 		}
 	}
 
-	private static void locateBlocky1(Location start, List<Location> current) {
+	private static void locateBlocky1(Location start, int radius, List<Location> current) {
 		VersionChanger change = PluginUtils.changer;
 		World w = start.getWorld();
 		int x = start.getBlockX();
@@ -73,8 +75,8 @@ public class Locator {
 		AbstractReflect cref = REFLECTS.get("chunk");
 
 		Object bw = wref.run("get", w);
-		for (int cx = x - 3; cx <= x + 3; cx++) {
-			for (int cz = z - 3; cz <= z + 3; cz++) {
+		for (int cx = x - radius; cx <= x + radius; cx++) {
+			for (int cz = z - radius; cz <= z + radius; cz++) {
 				boolean checkLoc = true;
 				if (cx == x && cz == z) {
 					checkLoc = false;
@@ -93,14 +95,14 @@ public class Locator {
 					}
 					current.add(l);
 					if (checkLoc) {
-						locateBlocky1(l, current);
+						locateBlocky1(l, radius, current);
 					}
 				}
 			}
 		}
 	}
 	
-	private static void locateBlocky2(Location start, List<Location> current) {
+	private static void locateBlocky2(Location start, int radius, List<Location> current) {
 		VersionChanger change = PluginUtils.changer;
 		World w = start.getWorld();
 		int x = start.getBlockX();
@@ -110,8 +112,8 @@ public class Locator {
 		AbstractReflect apiref = REFLECTS.get("api");
 		Object api = apiref.run("api");
 		
-		for (int cx = x - 3; cx <= x + 3; cx++) {
-			for (int cz = z - 3; cz <= z + 3; cz++) {
+		for (int cx = x - radius; cx <= x + radius; cx++) {
+			for (int cz = z - radius; cz <= z + radius; cz++) {
 				boolean checkLoc = true;
 				if (cx == x && cz == z) {
 					checkLoc = false;
@@ -126,7 +128,7 @@ public class Locator {
 					}
 					current.add(l);
 					if (checkLoc) {
-						locateBlocky2(l, current);
+						locateBlocky2(l, radius, current);
 					}
 				}
 			}
