@@ -134,6 +134,25 @@ public class Locator {
 			}
 		}
 	}
+	
+	public static boolean isPlayerPlaced(Location location) {
+		if(blockylog) {
+			if(version == 1) {
+				AbstractReflect wref = REFLECTS.get("world");
+				AbstractReflect cref = REFLECTS.get("chunk");
+				Chunk chunk = location.getChunk();
+				Object world = wref.run("get", location.getWorld());
+				if(!(boolean) wref.run(world, "contains", chunk.getX(), chunk.getZ())) {
+					return false;
+				}
+				return (boolean) cref.run(wref.run(world, "get", chunk.getX(), chunk.getZ()), "contains", location.getBlockX() - chunk.getX() * 16, location.getBlockY(), location.getBlockZ() - chunk.getZ() * 16);
+			} else if(version == 2) {
+				AbstractReflect apiref = REFLECTS.get("api");
+				return (boolean) apiref.run(apiref.run("api"), "placed", location);
+			}
+		}
+		return false;
+	}
 
 	public static void generateReflect() {
 		if (version == 1) {

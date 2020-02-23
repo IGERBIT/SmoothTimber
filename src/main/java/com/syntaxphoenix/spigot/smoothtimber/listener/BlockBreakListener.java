@@ -34,9 +34,12 @@ public class BlockBreakListener implements Listener {
 		VersionChanger change = PluginUtils.changer;
 		if (change.isWoodBlock(e.getBlock())) {
 			if (change.hasCuttingItemInHand(p)) {
-				e.setCancelled(true);
 				ItemStack tool = change.getItemInHand(p);
 				Location l = e.getBlock().getLocation();
+				if(Locator.isPlayerPlaced(l)) {
+					return;
+				}
+				e.setCancelled(true);
 				Bukkit.getScheduler().runTaskAsynchronously(PluginUtils.m, new Runnable() {
 					@Override
 					public void run() {
