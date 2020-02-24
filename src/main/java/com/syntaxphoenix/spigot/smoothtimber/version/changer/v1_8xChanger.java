@@ -102,9 +102,30 @@ public class v1_8xChanger implements VersionChanger {
 
 	@Override
 	public void dropItemByFallingBlock(FallingBlock block) {
-		block.getWorld().dropItemNaturally(block.getLocation(),
-				new MaterialData((Material) Storage.MATERIAL.run("type", Storage.FALLING_BLOCK.run(block, "id")),
-						(byte) Storage.FALLING_BLOCK.run(block, "data")).toItemStack());
+		block.getWorld().dropItem(block.getLocation(),
+				getItemStack((Material) Storage.MATERIAL.run("type", Storage.FALLING_BLOCK.run(block, "id")),
+						(byte) Storage.FALLING_BLOCK.run(block, "data")));
+	}
+
+	public ItemStack getItemStack(Material type, byte id) {
+		if (type == Material.valueOf("LOG")) {
+			if (id == 1 || id == 5 || id == 9 || id == 13) {
+				return new MaterialData(type, (byte) 1).toItemStack(1);
+			} else if (id == 2 || id == 6 || id == 10 || id == 14) {
+				return new MaterialData(type, (byte) 2).toItemStack(1);
+			} else if (id == 3 || id == 7 || id == 11 || id == 15) {
+				return new MaterialData(type, (byte) 3).toItemStack(1);
+			} else {
+				return new MaterialData(type, (byte) 0).toItemStack(1);
+			}
+		} else if (type == Material.valueOf("LOG_2")) {
+			if (id == 1 || id == 3 || id == 5 || id == 7) {
+				return new MaterialData(type, (byte) 1).toItemStack(1);
+			} else if (id == 0 || id == 2 || id == 4 || id == 6) {
+				return new MaterialData(type, (byte) 0).toItemStack(1);
+			}
+		}
+		return null;
 	}
 
 }

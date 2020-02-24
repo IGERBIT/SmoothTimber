@@ -17,7 +17,7 @@ import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionExchanger;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.WoodType;
 
 @SuppressWarnings("deprecation")
-public class v1_9xChanger implements VersionChanger {
+public class v1_11xChanger implements VersionChanger {
 
 	@Override
 	public boolean hasCuttingItemInHand(Player player) {
