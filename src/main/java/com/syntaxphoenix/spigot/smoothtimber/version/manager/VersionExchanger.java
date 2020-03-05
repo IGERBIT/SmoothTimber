@@ -21,6 +21,9 @@ public class VersionExchanger {
 		} else if(ver == MCVersion.v1_9x) {
 			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
 			return new v1_9xChanger();
+		} else if(ver == MCVersion.v1_11x) {
+			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
+			return new v1_11xChanger();
 		} else if(ver == MCVersion.v1_13x) {
 			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
 			return new v1_13xChanger();
