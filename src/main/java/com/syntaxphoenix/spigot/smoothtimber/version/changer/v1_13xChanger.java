@@ -3,6 +3,7 @@ package com.syntaxphoenix.spigot.smoothtimber.version.changer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
@@ -26,6 +27,10 @@ public class v1_13xChanger implements VersionChanger {
 
 	@Override
 	public ItemStack removeDurabilityFromItem(ItemStack stack) {
+		float chance = 100 / stack.getEnchantmentLevel(Enchantment.DURABILITY) + 1;
+		if(random.nextInt(0, 100) >= chance) {
+			return stack;
+		}
 		ItemMeta meta = stack.getItemMeta();
 		if(meta instanceof Damageable) {
 			Damageable dmg = (Damageable) meta;

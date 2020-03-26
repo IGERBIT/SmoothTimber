@@ -7,7 +7,12 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.syntaxphoenix.syntaxapi.random.NumberGeneratorType;
+import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
+
 public interface VersionChanger {
+	
+	final RandomNumberGenerator random = NumberGeneratorType.MURMUR.create();
 	
 	public boolean hasCuttingItemInHand(Player player);
 	
