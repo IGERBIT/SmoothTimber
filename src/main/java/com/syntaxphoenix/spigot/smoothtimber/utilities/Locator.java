@@ -25,7 +25,7 @@ public class Locator {
 	protected static int version = 0;
 
 	public static void locateWood(Location start, List<Location> current) {
-		int radius = CutterConfig.checkRadius;
+		int radius = CutterConfig.CHECK_RADIUS;
 		if (blockylog) {
 			if (version == 1) {
 				locateBlocky1(start, radius, current);

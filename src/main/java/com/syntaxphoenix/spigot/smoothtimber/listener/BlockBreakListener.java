@@ -17,8 +17,12 @@ import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
 import com.syntaxphoenix.spigot.smoothtimber.utilities.Locator;
 import com.syntaxphoenix.spigot.smoothtimber.utilities.PluginUtils;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
+import com.syntaxphoenix.syntaxapi.random.NumberGeneratorType;
+import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 
 public class BlockBreakListener implements Listener {
+
+	private final RandomNumberGenerator generator = NumberGeneratorType.MURMUR.create(System.currentTimeMillis() >> 3);
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
@@ -26,7 +30,7 @@ public class BlockBreakListener implements Listener {
 			return;
 		}
 		Player p = e.getPlayer();
-		if (CutterConfig.onSneak) {
+		if (CutterConfig.ON_SNEAK) {
 			if (!p.isSneaking()) {
 				return;
 			}
@@ -36,13 +40,14 @@ public class BlockBreakListener implements Listener {
 			if (change.hasCuttingItemInHand(p)) {
 				ItemStack tool = change.getItemInHand(p);
 				Location l = e.getBlock().getLocation();
-				if(Locator.isPlayerPlaced(l)) {
+				if (Locator.isPlayerPlaced(l)) {
 					return;
 				}
 				e.setCancelled(true);
 				Bukkit.getScheduler().runTaskAsynchronously(PluginUtils.m, new Runnable() {
 					@Override
 					public void run() {
+						int maxItems = CutterConfig.ENABLE_LUCK ? change.getMaxDropCount(tool) : 1;
 						ArrayList<Location> woodBlocks = new ArrayList<>();
 						Location bl = l;
 						int prev = woodBlocks.size();
@@ -68,10 +73,36 @@ public class BlockBreakListener implements Listener {
 										if (change.removeDurabilityFromItem(tool) == null) {
 											break;
 										}
-										change.toFallingBlock(b).setMetadata("STAnimate", new FixedMetadataValue(SmoothTimber.m, false));;
+										change.toFallingBlock(b).setMetadata("STAnimate", new FixedMetadataValue(
+												SmoothTimber.m, maxItems == 1 ? maxItems : generateAmount(maxItems)));
+										;
 									}
 								}
 							}
+
+							private int generateAmount(int max) {
+								int drop = 1;
+								float more = 1f / (max + 1);
+								float previous = more * 2f;
+								float next = more * 3f;
+								float chance = generator.nextFloat() * CutterConfig.LUCK_MULTIPLIER;
+								while (true) {
+									if (previous < chance && chance > next) {
+										drop++;
+										previous = next;
+										next += more;
+									} else if (previous < chance && chance < next) {
+										drop++;
+										break;
+									} else {
+										break;
+									}
+								}
+								if(drop > 64)
+									return 64;
+								return drop;
+							}
+
 						});
 					}
 				});

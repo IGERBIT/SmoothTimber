@@ -21,7 +21,7 @@ public class BlockFallListener implements Listener {
 			return;
 		}
 		event.setCancelled(true);
-		change.dropItemByFallingBlock(block);
+		change.dropItemByFallingBlock(block, block.getMetadata("STAnimate").get(0).asInt());
 		block.remove();
 	}
 

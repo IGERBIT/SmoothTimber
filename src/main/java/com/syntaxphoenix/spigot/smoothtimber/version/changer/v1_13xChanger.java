@@ -22,20 +22,23 @@ public class v1_13xChanger implements VersionChanger {
 
 	@Override
 	public boolean hasCuttingItemInHand(Player player) {
-		return CutterConfig.cutterMaterials.contains(getItemInHand(player).getType().name());
+		return CutterConfig.CUTTER_MATERIALS.contains(getItemInHand(player).getType().name());
 	}
 
 	@Override
 	public ItemStack removeDurabilityFromItem(ItemStack stack) {
-		float chance = 100 / stack.getEnchantmentLevel(Enchantment.DURABILITY) + 1;
-		if(random.nextInt(0, 100) >= chance) {
-			return stack;
+		if (CutterConfig.ENABLE_UNBREAKING) {
+			int level = stack.getEnchantmentLevel(Enchantment.DURABILITY);
+			float chance = 100 / (level <= 0 ? 1 : (level + 1));
+			if (random.nextFloat(0, 100) > chance) {
+				return stack;
+			}
 		}
 		ItemMeta meta = stack.getItemMeta();
-		if(meta instanceof Damageable) {
+		if (meta instanceof Damageable) {
 			Damageable dmg = (Damageable) meta;
 			int damage = dmg.getDamage() + 1;
-			if(stack.getType().getMaxDurability() - damage < 0) {
+			if (stack.getType().getMaxDurability() - damage < 0) {
 				stack.setAmount(0);
 				return null;
 			}
@@ -46,37 +49,45 @@ public class v1_13xChanger implements VersionChanger {
 	}
 
 	@Override
+	public int getMaxDropCount(ItemStack stack) {
+		int level = stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+		return level <= 0 ? 1 : level + 1;
+	}
+
+	@Override
 	public void setItemInPlayerHand(Player player, ItemStack stack) {
 		player.getEquipment().setItemInMainHand(stack);
 	}
 
 	@Override
 	public boolean isWoodBlock(Block block) {
-		return (block.getBlockData().getMaterial().name().endsWith("_LOG") || block.getBlockData().getMaterial().name().endsWith("_WOOD") || block.getBlockData().getMaterial().name().endsWith("_FENCE"));
+		return (block.getBlockData().getMaterial().name().endsWith("_LOG")
+				|| block.getBlockData().getMaterial().name().endsWith("_WOOD")
+				|| block.getBlockData().getMaterial().name().endsWith("_FENCE"));
 	}
 
 	@Override
 	public void setupConfig() {
-		CutterConfig.cutterMaterials.addAll(Lists.asList("WOODEN_AXE", "STONE_AXE",
-				"IRON_AXE", "GOLDEN_AXE", "DIAMOND_AXE"));
+		CutterConfig.CUTTER_MATERIALS
+				.addAll(Lists.asList("WOODEN_AXE", "STONE_AXE", "IRON_AXE", "GOLDEN_AXE", "DIAMOND_AXE"));
 	}
 
 	@Override
 	public boolean hasPermissionForWood(Player p, Block b) {
-		if(!CutterConfig.permissionsEnabled) {
+		if (!CutterConfig.ENABLE_PERMISSIONS) {
 			return true;
 		}
 		String mat = b.getBlockData().getMaterial().name();
 		WoodType type = WoodType.OAK;
-		if(mat.startsWith("BIRCH_")) {
+		if (mat.startsWith("BIRCH_")) {
 			type = WoodType.BIRCH;
-		} else if(mat.startsWith("JUNGLE_")) {
+		} else if (mat.startsWith("JUNGLE_")) {
 			type = WoodType.JUNGLE;
-		} else if(mat.startsWith("SPRUCE_")) {
+		} else if (mat.startsWith("SPRUCE_")) {
 			type = WoodType.SPRUCE;
-		} else if(mat.startsWith("DARK_OAK_")) {
+		} else if (mat.startsWith("DARK_OAK_")) {
 			type = WoodType.DARKOAK;
-		} else if(mat.startsWith("ACACIA_")) {
+		} else if (mat.startsWith("ACACIA_")) {
 			type = WoodType.ACACIA;
 		}
 		return VersionExchanger.checkPermission(type, p);
@@ -98,15 +109,16 @@ public class v1_13xChanger implements VersionChanger {
 		block.setType(Material.AIR);
 		return block.getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0.2, 0.5), data);
 	}
-	
+
 	@Override
 	public EntityType getFallingBlockType() {
 		return EntityType.FALLING_BLOCK;
 	}
 
 	@Override
-	public void dropItemByFallingBlock(FallingBlock block) {
-		block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(block.getBlockData().getMaterial()));
+	public void dropItemByFallingBlock(FallingBlock block, int amount) {
+		block.getWorld().dropItemNaturally(block.getLocation(),
+				new ItemStack(block.getBlockData().getMaterial(), amount));
 	}
 
 }

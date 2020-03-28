@@ -22,14 +22,17 @@ public class v1_8xChanger implements VersionChanger {
 
 	@Override
 	public boolean hasCuttingItemInHand(Player player) {
-		return CutterConfig.cutterMaterials.contains(getItemInHand(player).getType().name());
+		return CutterConfig.CUTTER_MATERIALS.contains(getItemInHand(player).getType().name());
 	}
 
 	@Override
 	public ItemStack removeDurabilityFromItem(ItemStack stack) {
-		float chance = 100 / stack.getEnchantmentLevel(Enchantment.DURABILITY) + 1;
-		if(random.nextInt(0, 100) >= chance) {
-			return stack;
+		if (CutterConfig.ENABLE_UNBREAKING) {
+			int level = stack.getEnchantmentLevel(Enchantment.DURABILITY);
+			float chance = 100 / (level <= 0 ? 1 : (level + 1));
+			if (random.nextFloat(0, 100) > chance) {
+				return stack;
+			}
 		}
 		Integer durability = stack.getDurability() + 1;
 		if (stack.getType().getMaxDurability() < durability) {
@@ -38,6 +41,12 @@ public class v1_8xChanger implements VersionChanger {
 		}
 		stack.setDurability(durability.shortValue());
 		return stack;
+	}
+
+	@Override
+	public int getMaxDropCount(ItemStack stack) {
+		int level = stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+		return level <= 0 ? 1 : level + 1;
 	}
 
 	@Override
@@ -52,13 +61,13 @@ public class v1_8xChanger implements VersionChanger {
 
 	@Override
 	public void setupConfig() {
-		CutterConfig.cutterMaterials
+		CutterConfig.CUTTER_MATERIALS
 				.addAll(Lists.asList("WOOD_AXE", "STONE_AXE", "IRON_AXE", "GOLD_AXE", "DIAMOND_AXE"));
 	}
 
 	@Override
 	public boolean hasPermissionForWood(Player p, Block b) {
-		if (!CutterConfig.permissionsEnabled) {
+		if (!CutterConfig.ENABLE_PERMISSIONS) {
 			return true;
 		}
 		WoodType type = WoodType.OAK;
@@ -106,28 +115,28 @@ public class v1_8xChanger implements VersionChanger {
 	}
 
 	@Override
-	public void dropItemByFallingBlock(FallingBlock block) {
+	public void dropItemByFallingBlock(FallingBlock block, int amount) {
 		block.getWorld().dropItem(block.getLocation(),
 				getItemStack((Material) Storage.MATERIAL.run("type", Storage.FALLING_BLOCK.run(block, "id")),
-						(byte) Storage.FALLING_BLOCK.run(block, "data")));
+						(byte) Storage.FALLING_BLOCK.run(block, "data"), amount));
 	}
 
-	public ItemStack getItemStack(Material type, byte id) {
+	public ItemStack getItemStack(Material type, byte id, int amount) {
 		if (type == Material.valueOf("LOG")) {
 			if (id == 1 || id == 5 || id == 9 || id == 13) {
-				return new MaterialData(type, (byte) 1).toItemStack(1);
+				return new MaterialData(type, (byte) 1).toItemStack(amount);
 			} else if (id == 2 || id == 6 || id == 10 || id == 14) {
-				return new MaterialData(type, (byte) 2).toItemStack(1);
+				return new MaterialData(type, (byte) 2).toItemStack(amount);
 			} else if (id == 3 || id == 7 || id == 11 || id == 15) {
-				return new MaterialData(type, (byte) 3).toItemStack(1);
+				return new MaterialData(type, (byte) 3).toItemStack(amount);
 			} else {
-				return new MaterialData(type, (byte) 0).toItemStack(1);
+				return new MaterialData(type, (byte) 0).toItemStack(amount);
 			}
 		} else if (type == Material.valueOf("LOG_2")) {
 			if (id == 1 || id == 3 || id == 5 || id == 7) {
-				return new MaterialData(type, (byte) 1).toItemStack(1);
+				return new MaterialData(type, (byte) 1).toItemStack(amount);
 			} else if (id == 0 || id == 2 || id == 4 || id == 6) {
-				return new MaterialData(type, (byte) 0).toItemStack(1);
+				return new MaterialData(type, (byte) 0).toItemStack(amount);
 			}
 		}
 		return null;

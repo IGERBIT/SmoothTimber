@@ -3,8 +3,10 @@ package com.syntaxphoenix.spigot.smoothtimber.utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import com.syntaxphoenix.spigot.smoothtimber.SmoothTimber;
+import com.syntaxphoenix.spigot.smoothtimber.config.ConfigTimer;
 import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
 import com.syntaxphoenix.spigot.smoothtimber.listener.BlockBreakListener;
 import com.syntaxphoenix.spigot.smoothtimber.listener.BlockFallListener;
@@ -31,6 +33,7 @@ public class PluginUtils {
 		if (changer != null) {
 			CutterConfig.load();
 			registerListener();
+			registerTasks();
 			stats = new SyntaxPhoenixStats("7vTfe4hf", SmoothTimber.m);
 		}
 	}
@@ -42,7 +45,7 @@ public class PluginUtils {
 	private void checkPlugins(PluginManager pm) {
 		Plugin blocky;
 		if((blocky = pm.getPlugin("BlockyLog")) != null) {
-			if(CutterConfig.extension_blocky) {
+			if(CutterConfig.EXTENSION_BLOCKY) {
 				Locator.blockylog = true;
 				Locator.version = Integer.parseInt(blocky.getDescription().getVersion().split("\\.")[0]);
 				Locator.generateReflect();
@@ -56,6 +59,13 @@ public class PluginUtils {
 		pm.registerEvents(new BlockFallListener(), SmoothTimber.m);
 		
 		checkPlugins(pm);
+	}
+
+	private void registerTasks() {
+		BukkitScheduler scheduler = Bukkit.getScheduler();
+		
+		scheduler.runTaskTimerAsynchronously(m, new ConfigTimer(), 20, 60);
+		
 	}
 
 	/*

@@ -12,7 +12,7 @@ import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 
 public interface VersionChanger {
 	
-	final RandomNumberGenerator random = NumberGeneratorType.MURMUR.create();
+	final RandomNumberGenerator random = NumberGeneratorType.MURMUR.create(System.currentTimeMillis());
 	
 	public boolean hasCuttingItemInHand(Player player);
 	
@@ -34,6 +34,8 @@ public interface VersionChanger {
 
 	public EntityType getFallingBlockType();
 
-	public void dropItemByFallingBlock(FallingBlock block);
+	public void dropItemByFallingBlock(FallingBlock block, int amount);
+
+	public int getMaxDropCount(ItemStack tool);
 
 }
