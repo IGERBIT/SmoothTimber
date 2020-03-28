@@ -19,7 +19,7 @@ public abstract class AbstractReflect {
 	private final HashMap<String, Field> fields = new HashMap<>();
 
 	protected AbstractReflect(String classPath) {
-		this.owner = Reflector.getClass(classPath);
+		this.owner = ClassCache.getClass(classPath);
 	}
 
 	protected AbstractReflect(Class<?> owner) {
@@ -34,6 +34,22 @@ public abstract class AbstractReflect {
 		return owner;
 	}
 
+	/*
+	 * 
+	 */
+
+	public void delete() {
+		constructors.clear();
+		methods.clear();
+		fields.clear();
+		try {
+			fields.put("owner", this.getClass().getDeclaredField("owner"));
+			setFieldValue("owner", null);
+			fields.remove("owner");
+		} catch (NoSuchFieldException | SecurityException e) {
+		}
+	}
+	
 	/*
 	 * 
 	 */

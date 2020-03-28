@@ -31,7 +31,7 @@ public class VersionExchanger {
 		PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &4unsupported&7 Minecraft Version &4" + version);
 		PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7If you want to use &5Smooth&dTimber &7you need to update your server to a supported Minecraft Version");
 		PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7Supported Versions are: &a" + Strings.toString(MCVersion.getSupportedVersions(), "&7, &a"));
-		Bukkit.getPluginManager().disablePlugin(PluginUtils.m);
+		Bukkit.getPluginManager().disablePlugin(PluginUtils.MAIN);
 		return null;
 	}
 	

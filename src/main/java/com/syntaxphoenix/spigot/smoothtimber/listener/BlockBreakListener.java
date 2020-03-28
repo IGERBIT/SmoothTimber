@@ -35,7 +35,7 @@ public class BlockBreakListener implements Listener {
 				return;
 			}
 		}
-		VersionChanger change = PluginUtils.changer;
+		VersionChanger change = PluginUtils.CHANGER;
 		if (change.isWoodBlock(e.getBlock())) {
 			if (change.hasCuttingItemInHand(p)) {
 				ItemStack tool = change.getItemInHand(p);
@@ -44,7 +44,7 @@ public class BlockBreakListener implements Listener {
 					return;
 				}
 				e.setCancelled(true);
-				Bukkit.getScheduler().runTaskAsynchronously(PluginUtils.m, new Runnable() {
+				Bukkit.getScheduler().runTaskAsynchronously(PluginUtils.MAIN, new Runnable() {
 					@Override
 					public void run() {
 						int maxItems = CutterConfig.ENABLE_LUCK ? change.getMaxDropCount(tool) : 1;
@@ -64,7 +64,7 @@ public class BlockBreakListener implements Listener {
 						if (SmoothTimber.triggerChopEvent(p, l, change, tool, woodBlocks)) {
 							return;
 						}
-						Bukkit.getScheduler().runTask(PluginUtils.m, new Runnable() {
+						Bukkit.getScheduler().runTask(PluginUtils.MAIN, new Runnable() {
 							@Override
 							public void run() {
 								for (int v = 0; v < woodBlocks.size(); v++) {

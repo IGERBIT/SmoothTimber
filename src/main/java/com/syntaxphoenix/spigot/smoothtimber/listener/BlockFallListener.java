@@ -12,7 +12,7 @@ public class BlockFallListener implements Listener {
 	
 	@EventHandler
 	public void onChange(EntityChangeBlockEvent event) {
-		VersionChanger change = PluginUtils.changer;
+		VersionChanger change = PluginUtils.CHANGER;
 		if(event.getEntityType() != change.getFallingBlockType()) {
 			return;
 		}

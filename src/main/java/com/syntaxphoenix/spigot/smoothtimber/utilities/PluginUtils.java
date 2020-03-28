@@ -6,11 +6,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.syntaxphoenix.spigot.smoothtimber.SmoothTimber;
-import com.syntaxphoenix.spigot.smoothtimber.config.ConfigTimer;
-import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
-import com.syntaxphoenix.spigot.smoothtimber.listener.BlockBreakListener;
-import com.syntaxphoenix.spigot.smoothtimber.listener.BlockFallListener;
+import com.syntaxphoenix.spigot.smoothtimber.config.*;
+import com.syntaxphoenix.spigot.smoothtimber.listener.*;
 import com.syntaxphoenix.spigot.smoothtimber.stats.SyntaxPhoenixStats;
+import com.syntaxphoenix.spigot.smoothtimber.utilities.plugin.PluginSettings;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionExchanger;
 
@@ -18,23 +17,25 @@ import net.md_5.bungee.api.ChatColor;
 
 public class PluginUtils {
 
-	public static PluginUtils utils;
-	public static SmoothTimber m;
-	public static VersionChanger changer;
-	public static SyntaxPhoenixStats stats;
+	public static PluginSettings SETTINGS = new PluginSettings();;
+	public static PluginUtils UTILS;
+	public static SmoothTimber MAIN;
+	public static VersionChanger CHANGER;
+	public static SyntaxPhoenixStats STATS;
 
 	public static void setUp(SmoothTimber main) {
-		m = main;
-		utils = new PluginUtils();
+		MAIN = main;
+		UTILS = new PluginUtils();
 	}
 
 	public PluginUtils() {
-		changer = VersionExchanger.getVersionChanger(VersionExchanger.getMinecraftVersion());
-		if (changer != null) {
+		CHANGER = VersionExchanger.getVersionChanger(VersionExchanger.getMinecraftVersion());
+		if (CHANGER != null) {
 			CutterConfig.load();
 			registerListener();
 			registerTasks();
-			stats = new SyntaxPhoenixStats("7vTfe4hf", SmoothTimber.m);
+			checkPlugins();
+			STATS = new SyntaxPhoenixStats("7vTfe4hf", MAIN);
 		}
 	}
 
@@ -42,30 +43,29 @@ public class PluginUtils {
 	 * 
 	 */
 
-	private void checkPlugins(PluginManager pm) {
-		Plugin blocky;
-		if((blocky = pm.getPlugin("BlockyLog")) != null) {
-			if(CutterConfig.EXTENSION_BLOCKY) {
-				Locator.blockylog = true;
-				Locator.version = Integer.parseInt(blocky.getDescription().getVersion().split("\\.")[0]);
-				Locator.generateReflect();
+	private void checkPlugins() {
+		PluginManager pm = Bukkit.getPluginManager();
+		for (Plugin plugin : pm.getPlugins()) {
+			if (plugin == null)
+				continue;
+			if (plugin.getName().equals("BlockyLog")) {
+				SETTINGS.updatePlugin(plugin, plugin.isEnabled());
 			}
 		}
 	}
 
 	private void registerListener() {
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new BlockBreakListener(), SmoothTimber.m);
-		pm.registerEvents(new BlockFallListener(), SmoothTimber.m);
-		
-		checkPlugins(pm);
+		pm.registerEvents(new BlockBreakListener(), MAIN);
+		pm.registerEvents(new BlockFallListener(), MAIN);
+		pm.registerEvents(new PluginLoadListener(), MAIN);
 	}
 
 	private void registerTasks() {
 		BukkitScheduler scheduler = Bukkit.getScheduler();
-		
-		scheduler.runTaskTimerAsynchronously(m, new ConfigTimer(), 20, 60);
-		
+
+		scheduler.runTaskTimerAsynchronously(MAIN, new ConfigTimer(), 20, 60);
+
 	}
 
 	/*

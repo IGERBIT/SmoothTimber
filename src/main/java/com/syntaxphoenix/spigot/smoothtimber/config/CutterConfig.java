@@ -43,7 +43,7 @@ public class CutterConfig {
 	public static void load() {
 		loadConfig();
 		if (loaded == -1)
-			PluginUtils.changer.setupConfig();
+			PluginUtils.CHANGER.setupConfig();
 
 		if (file.exists())
 			VERSION = check("version", 1);

@@ -5,7 +5,6 @@
  */
 package com.syntaxphoenix.spigot.smoothtimber.utilities;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Chunk;
@@ -13,24 +12,25 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
+import com.syntaxphoenix.spigot.smoothtimber.utilities.plugin.PluginPackage;
+import com.syntaxphoenix.spigot.smoothtimber.utilities.plugin.PluginSettings;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 import com.syntaxphoenix.syntaxapi.reflections.AbstractReflect;
-import com.syntaxphoenix.syntaxapi.reflections.Reflect;
+import com.syntaxphoenix.syntaxapi.reflections.ReflectCache;
 
 public class Locator {
 
-	public final static HashMap<String, AbstractReflect> REFLECTS = new HashMap<>();
-
-	protected static boolean blockylog = false;
-	protected static int version = 0;
+	private static PluginSettings SETTINGS = PluginUtils.SETTINGS;
 
 	public static void locateWood(Location start, List<Location> current) {
 		int radius = CutterConfig.CHECK_RADIUS;
-		if (blockylog) {
-			if (version == 1) {
-				locateBlocky1(start, radius, current);
-			} else if (version == 2) {
-				locateBlocky2(start, radius, current);
+		PluginPackage pack = SETTINGS.getPackage("BlockyLog");
+		if (pack != null) {
+			checkCache(pack);
+			if (pack.getVersion() == 1) {
+				locateBlocky1(pack.getCache(), start, radius, current);
+			} else if (pack.getVersion() == 2) {
+				locateBlocky2(pack.getCache(), start, radius, current);
 			}
 		} else {
 			locateOnly(start, radius, current);
@@ -38,12 +38,12 @@ public class Locator {
 	}
 
 	private static void locateOnly(Location start, int radius, List<Location> current) {
-		VersionChanger change = PluginUtils.changer;
+		VersionChanger change = PluginUtils.CHANGER;
 		World w = start.getWorld();
 		int x = start.getBlockX();
 		int y = start.getBlockY();
 		int z = start.getBlockZ();
-		
+
 		for (int cx = x - radius; cx <= x + radius; cx++) {
 			for (int cz = z - radius; cz <= z + radius; cz++) {
 				boolean checkLoc = true;
@@ -64,15 +64,15 @@ public class Locator {
 		}
 	}
 
-	private static void locateBlocky1(Location start, int radius, List<Location> current) {
-		VersionChanger change = PluginUtils.changer;
+	private static void locateBlocky1(ReflectCache cache, Location start, int radius, List<Location> current) {
+		VersionChanger change = PluginUtils.CHANGER;
 		World w = start.getWorld();
 		int x = start.getBlockX();
 		int y = start.getBlockY();
 		int z = start.getBlockZ();
 
-		AbstractReflect wref = REFLECTS.get("world");
-		AbstractReflect cref = REFLECTS.get("chunk");
+		AbstractReflect wref = cache.get("world").get();
+		AbstractReflect cref = cache.get("chunk").get();
 
 		Object bw = wref.run("get", w);
 		for (int cx = x - radius; cx <= x + radius; cx++) {
@@ -95,23 +95,23 @@ public class Locator {
 					}
 					current.add(l);
 					if (checkLoc) {
-						locateBlocky1(l, radius, current);
+						locateBlocky1(cache, l, radius, current);
 					}
 				}
 			}
 		}
 	}
-	
-	private static void locateBlocky2(Location start, int radius, List<Location> current) {
-		VersionChanger change = PluginUtils.changer;
+
+	private static void locateBlocky2(ReflectCache cache, Location start, int radius, List<Location> current) {
+		VersionChanger change = PluginUtils.CHANGER;
 		World w = start.getWorld();
 		int x = start.getBlockX();
 		int y = start.getBlockY();
 		int z = start.getBlockZ();
 
-		AbstractReflect apiref = REFLECTS.get("api");
+		AbstractReflect apiref = cache.get("api").get();
 		Object api = apiref.run("api");
-		
+
 		for (int cx = x - radius; cx <= x + radius; cx++) {
 			for (int cz = z - radius; cz <= z + radius; cz++) {
 				boolean checkLoc = true;
@@ -128,43 +128,49 @@ public class Locator {
 					}
 					current.add(l);
 					if (checkLoc) {
-						locateBlocky2(l, radius, current);
+						locateBlocky2(cache, l, radius, current);
 					}
 				}
 			}
 		}
 	}
-	
+
 	public static boolean isPlayerPlaced(Location location) {
-		if(blockylog) {
-			if(version == 1) {
-				AbstractReflect wref = REFLECTS.get("world");
-				AbstractReflect cref = REFLECTS.get("chunk");
+		PluginPackage pack = SETTINGS.getPackage("BlockyLog");
+		if (pack != null) {
+			int version = pack.getVersion();
+			checkCache(pack);
+			if (version == 1) {
+				AbstractReflect wref = pack.getCache().get("world").get();
+				AbstractReflect cref = pack.getCache().get("chunk").get();
 				Chunk chunk = location.getChunk();
 				Object world = wref.run("get", location.getWorld());
-				if(!(boolean) wref.run(world, "contains", chunk.getX(), chunk.getZ())) {
+				if (!(boolean) wref.run(world, "contains", chunk.getX(), chunk.getZ())) {
 					return false;
 				}
-				return (boolean) cref.run(wref.run(world, "get", chunk.getX(), chunk.getZ()), "contains", location.getBlockX() - chunk.getX() * 16, location.getBlockY(), location.getBlockZ() - chunk.getZ() * 16);
-			} else if(version == 2) {
-				AbstractReflect apiref = REFLECTS.get("api");
+				return (boolean) cref.run(wref.run(world, "get", chunk.getX(), chunk.getZ()), "contains",
+						location.getBlockX() - chunk.getX() * 16, location.getBlockY(),
+						location.getBlockZ() - chunk.getZ() * 16);
+			} else if (version == 2) {
+				AbstractReflect apiref = pack.getCache().get("api").get();
 				return (boolean) apiref.run(apiref.run("api"), "placed", location);
 			}
 		}
 		return false;
 	}
 
-	public static void generateReflect() {
+	private static void checkCache(PluginPackage pack) {
+		int version = pack.getVersion();
+		ReflectCache cache = pack.getCache();
 		if (version == 1) {
-			REFLECTS.put("world",
-					new Reflect(Reflector.getBL1Class("log.BlockyWorld")).searchMethod("get", "get", World.class)
-							.searchMethod("chunk", "getChunk", int.class, int.class)
-							.searchMethod("contains", "containsChunk", int.class, int.class));
-			REFLECTS.put("chunk", new Reflect(Reflector.getBL1Class("log.BlockyChunk")).searchMethod("contains",
-					"containsBlock", int.class, int.class, int.class));
+			cache.create("world", Reflector.getBL1Class("log.BlockyWorld")).searchMethod("get", "get", World.class)
+					.searchMethod("chunk", "getChunk", int.class, int.class)
+					.searchMethod("contains", "containsChunk", int.class, int.class);
+			cache.create("chunk", Reflector.getBL1Class("log.BlockyChunk")).searchMethod("contains", "containsBlock",
+					int.class, int.class, int.class);
 		} else if (version == 2) {
-			REFLECTS.put("api", new Reflect(Reflector.getBL2Class("BlockyApi")).searchMethod("api", "getApi").searchMethod("placed", "isPlayerPlaced",
-					Location.class));
+			cache.create("api", Reflector.getBL2Class("BlockyApi")).searchMethod("api", "getApi").searchMethod("placed",
+					"isPlayerPlaced", Location.class);
 		}
 	}
 
