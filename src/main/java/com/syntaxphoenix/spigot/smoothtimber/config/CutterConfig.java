@@ -47,8 +47,6 @@ public class CutterConfig {
 
 		if (file.exists())
 			VERSION = check("version", 1);
-		else
-			VERSION = check("version", VERSION);
 		
 		/*
 		 * 
@@ -67,6 +65,8 @@ public class CutterConfig {
 		/*
 		 * 
 		 */
+		
+		VERSION = check("version", VERSION);
 		
 		CHECK_RADIUS = check("cutter.radius", CHECK_RADIUS);
 		CUTTER_MATERIALS = check("cutter.materials", CUTTER_MATERIALS);
