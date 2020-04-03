@@ -16,7 +16,7 @@ public class CutterConfig {
 	static File file = new File("plugins/SmoothTimber", "config.yml");
 	static long loaded = -1;
 	private static FileConfiguration cfg = new YamlConfiguration();
-	
+
 	/*
 	 * 
 	 */
@@ -32,10 +32,10 @@ public class CutterConfig {
 	public static boolean ENABLE_UNBREAKING = true;
 
 	public static boolean ENABLE_LUCK = false;
-	public static float LUCK_MULTIPLIER = 1.0f;
+	public static double LUCK_MULTIPLIER = 1.0;
 
 	public static boolean EXTENSION_BLOCKY = true;
-	
+
 	/*
 	 * 
 	 */
@@ -47,7 +47,7 @@ public class CutterConfig {
 
 		if (file.exists())
 			VERSION = check("version", 1);
-		
+
 		/*
 		 * 
 		 */
@@ -61,13 +61,13 @@ public class CutterConfig {
 			file.delete();
 			cfg = new YamlConfiguration();
 		}
-		
+
 		/*
 		 * 
 		 */
-		
+
 		VERSION = check("version", VERSION);
-		
+
 		CHECK_RADIUS = check("cutter.radius", CHECK_RADIUS);
 		CUTTER_MATERIALS = check("cutter.materials", CUTTER_MATERIALS);
 
@@ -80,7 +80,7 @@ public class CutterConfig {
 		LUCK_MULTIPLIER = check("enchantments.fortune.multiplier", LUCK_MULTIPLIER);
 
 		EXTENSION_BLOCKY = check("extensions.blockylog", EXTENSION_BLOCKY);
-		
+
 		/*
 		 * 
 		 */
@@ -115,8 +115,12 @@ public class CutterConfig {
 
 	public static void save() {
 		try {
-			if (!file.exists())
+			if (!file.exists()) {
+				File parent = file.getParentFile();
+				if (!parent.exists())
+					parent.mkdirs();
 				file.createNewFile();
+			}
 			cfg.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();

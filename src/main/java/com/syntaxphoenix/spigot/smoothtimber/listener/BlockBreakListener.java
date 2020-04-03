@@ -86,7 +86,7 @@ public class BlockBreakListener implements Listener {
 								float more = 1f / (max + 1);
 								float previous = more * 2f;
 								float next = more * 3f;
-								float chance = generator.nextFloat() * CutterConfig.LUCK_MULTIPLIER;
+								float chance = generator.nextFloat() * (float) CutterConfig.LUCK_MULTIPLIER;
 								while (true) {
 									if (previous < chance && chance > next) {
 										drop++;
