@@ -9,6 +9,7 @@ public abstract class AbstractReflectCache<R extends AbstractReflect> {
 	
 	public void clear() {
 		cache.values().forEach(ClassCache::uncache);
+		cache.clear();
 	}
 	
 	public Optional<R> get(String name) {
