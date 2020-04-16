@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,12 +29,17 @@ public class CutterConfig {
 	public static List<String> CUTTER_MATERIALS = new ArrayList<>();
 
 	public static boolean ON_SNEAK = false;
+	public static boolean TOGGLEABLE = false;
 	public static boolean ENABLE_PERMISSIONS = false;
 
 	public static boolean ENABLE_UNBREAKING = true;
 
 	public static boolean ENABLE_LUCK = false;
 	public static double LUCK_MULTIPLIER = 1.0;
+	
+	public static boolean ENABLE_WORLD = false;
+	public static boolean ENABLE_WORLD_BLACKLIST = false;
+	public static List<String> WORLD_LIST;
 
 	public static boolean EXTENSION_BLOCKY = true;
 
@@ -72,12 +79,17 @@ public class CutterConfig {
 		CUTTER_MATERIALS = check("cutter.materials", CUTTER_MATERIALS);
 
 		ON_SNEAK = check("options.cutter.sneak", ON_SNEAK);
+		TOGGLEABLE = check("options.cutter.toggleable", TOGGLEABLE);
 		ENABLE_PERMISSIONS = check("options.cutter.permissions", ENABLE_PERMISSIONS);
 
 		ENABLE_UNBREAKING = check("enchantments.unbreaking.enabled", ENABLE_UNBREAKING);
 
 		ENABLE_LUCK = check("enchantments.fortune.enabled", ENABLE_LUCK);
 		LUCK_MULTIPLIER = check("enchantments.fortune.multiplier", LUCK_MULTIPLIER);
+
+		ENABLE_WORLD = check("worlds.enabled", ENABLE_WORLD);
+		ENABLE_WORLD_BLACKLIST = check("worlds.blacklist", ENABLE_WORLD_BLACKLIST);
+		WORLD_LIST = check("worlds.list", worldStringList());
 
 		EXTENSION_BLOCKY = check("extensions.blockylog", EXTENSION_BLOCKY);
 
@@ -135,6 +147,22 @@ public class CutterConfig {
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * 
+	 */
+
+	private static List<String> worldStringList() {
+
+		if (WORLD_LIST != null)
+			return WORLD_LIST;
+
+		WORLD_LIST = new ArrayList<>();
+		for (World world : Bukkit.getWorlds()) {
+			WORLD_LIST.add(world.getName());
+		}
+		return WORLD_LIST;
 	}
 
 }

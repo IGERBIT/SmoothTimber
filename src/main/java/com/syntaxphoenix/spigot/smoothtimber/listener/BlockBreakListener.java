@@ -30,6 +30,13 @@ public class BlockBreakListener implements Listener {
 		if (e.isCancelled()) {
 			return;
 		}
+		
+		if(CutterConfig.ENABLE_WORLD) {
+			boolean contains = CutterConfig.WORLD_LIST.contains(e.getBlock().getWorld().getName());
+			if(CutterConfig.ENABLE_WORLD_BLACKLIST ? contains : !contains)
+				return;
+		}
+		
 		Player p = e.getPlayer();
 		if (CutterConfig.ON_SNEAK) {
 			if (!p.isSneaking()) {
