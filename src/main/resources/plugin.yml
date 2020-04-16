@@ -4,3 +4,23 @@ author: Lauriichen
 version: 1.6.4
 api-version: 1.13
 softdepend: [BlockyLog]
+
+commands:
+    smoothtimber:
+        description: SmoothTimber main command
+        aliases: [sm, stimb]
+        permission: smoothtimber.use
+        usage: Something went wrong! Use /&lt;command&gt; to get more help
+        
+permissions:
+    smoothtimber.*
+        description: Gives access to all SmoothTimber permissions
+        children:
+            smoothtimber.use: true
+            smoothtimber.toggle: true
+    smoothtimber.use:
+        description: Allows you to use SmoothTimber
+        default: true
+    smoothtimber.toggle:
+        description: Allows you to toggle the TreeCutter of SmoothTimber
+        default: true
