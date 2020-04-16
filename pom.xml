@@ -86,6 +86,12 @@
 	</build>
 
 	<repositories>
+	
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		
 		<!-- This adds the Spigot Maven repository to the build -->
 		<repository>
 			<id>spigot-repo</id>
@@ -94,6 +100,13 @@
 	</repositories>
 
 	<dependencies>
+		
+		<dependency>
+			<groupId>com.github.SyntaxPhoenix</groupId>
+			<artifactId>syntax-api</artifactId>
+			<version>0a7798bf79</version>
+		</dependency>
+		
 		<!--This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
