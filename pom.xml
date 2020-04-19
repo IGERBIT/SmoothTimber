@@ -105,6 +105,40 @@
 			<groupId>com.github.SyntaxPhoenix</groupId>
 			<artifactId>syntax-api</artifactId>
 			<version>0a7798bf79</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.yaml</groupId>
+					<artifactId>snakeyaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.fusesource.jansi</groupId>
+					<artifactId>jansi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.json</groupId>
+					<artifactId>simple</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.TheElectronWill</groupId>
+					<artifactId>TOML-javalib</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jdt</groupId>
+					<artifactId>org.eclipse.jdt.annotation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.trendafilov.confucius</groupId>
+					<artifactId>confucius</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!--This adds the Spigot API artifact to the build -->

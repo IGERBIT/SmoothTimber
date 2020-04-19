@@ -16,16 +16,16 @@ public class VersionExchanger {
 	public static VersionChanger getVersionChanger(String version) {
 		MCVersion ver = MCVersion.fromString(version);
 		if(ver == MCVersion.v1_8x) {
-			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
+			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version + " &7(&2Core " + ver.name() + "&7)");
 			return new v1_8xChanger();
 		} else if(ver == MCVersion.v1_9x) {
-			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
+			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version + " &7(&2Core " + ver.name() + "&7)");
 			return new v1_9xChanger();
 		} else if(ver == MCVersion.v1_11x) {
-			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
+			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version + " &7(&2Core " + ver.name() + "&7)");
 			return new v1_11xChanger();
 		} else if(ver == MCVersion.v1_13x) {
-			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version);
+			PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &asupported&7 Minecraft Version &a" + version + " &7(&2Core " + ver.name() + "&7)");
 			return new v1_13xChanger();
 		}
 		PluginUtils.sendConsoleMessage("&8[&5Smooth&dTimber&8] &7You're currently using the &4unsupported&7 Minecraft Version &4" + version);

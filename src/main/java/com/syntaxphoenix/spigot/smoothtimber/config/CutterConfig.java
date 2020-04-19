@@ -54,6 +54,7 @@ public class CutterConfig {
 
 		if (file.exists())
 			VERSION = check("version", 1);
+		loaded = file.lastModified();
 
 		/*
 		 * 

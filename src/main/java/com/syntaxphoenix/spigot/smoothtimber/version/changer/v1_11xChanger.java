@@ -1,5 +1,7 @@
 package com.syntaxphoenix.spigot.smoothtimber.version.changer;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +24,8 @@ public class v1_11xChanger implements VersionChanger {
 
 	@Override
 	public boolean hasCuttingItemInHand(Player player) {
-		return CutterConfig.CUTTER_MATERIALS.contains(getItemInHand(player).getType().name());
+		List<String> mats = CutterConfig.CUTTER_MATERIALS;
+		return mats.contains(getItemInHand(player).getType().name());
 	}
 
 	@Override
@@ -139,6 +142,6 @@ public class v1_11xChanger implements VersionChanger {
 				return new MaterialData(type, (byte) 0).toItemStack(amount);
 			}
 		}
-		return null;
+		return new ItemStack(type, amount);
 	}
 }

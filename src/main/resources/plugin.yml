@@ -13,7 +13,7 @@ commands:
         usage: Something went wrong! Use /&lt;command&gt; to get more help
         
 permissions:
-    smoothtimber.*
+    smoothtimber.*:
         description: Gives access to all SmoothTimber permissions
         children:
             smoothtimber.use: true

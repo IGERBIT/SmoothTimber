@@ -139,7 +139,7 @@ public class v1_8xChanger implements VersionChanger {
 				return new MaterialData(type, (byte) 0).toItemStack(amount);
 			}
 		}
-		return null;
+		return new ItemStack(type, amount);
 	}
 
 }
