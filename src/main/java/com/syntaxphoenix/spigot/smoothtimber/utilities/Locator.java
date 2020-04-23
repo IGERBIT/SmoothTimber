@@ -51,7 +51,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
+				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
 					if (current.contains(l)) {
 						continue;
 					}
@@ -82,7 +82,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
+				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
 					Chunk c = l.getChunk();
 					if ((boolean) wref.run(bw, "contains", c.getX(), c.getZ())) {
 						Object bc = wref.run(bw, "chunk", c.getX(), c.getZ());
@@ -119,7 +119,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
+				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
 					if ((boolean) apiref.run(api, "placed", l)) {
 						continue;
 					}

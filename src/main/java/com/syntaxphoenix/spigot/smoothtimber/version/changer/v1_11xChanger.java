@@ -59,7 +59,8 @@ public class v1_11xChanger implements VersionChanger {
 
 	@Override
 	public boolean isWoodBlock(Block block) {
-		return (block.getType().name().replace("_2", "").equals("LOG") || block.getType().name().equals("FENCE"));
+		String type = block.getType().name();
+		return (type.replace("_2", "").equals("LOG") || type.equals("FENCE"));
 	}
 
 	@Override

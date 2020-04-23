@@ -1,7 +1,7 @@
 main: com.syntaxphoenix.spigot.smoothtimber.SmoothTimber
 name: SmoothTimber
 author: Lauriichen
-version: pre-1.6.4
+version: pre-1.6.5
 api-version: 1.13
 softdepend: [BlockyLog]
 

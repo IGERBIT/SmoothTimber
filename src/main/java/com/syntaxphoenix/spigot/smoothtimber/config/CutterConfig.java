@@ -36,7 +36,7 @@ public class CutterConfig {
 
 	public static boolean ENABLE_LUCK = false;
 	public static double LUCK_MULTIPLIER = 1.0;
-	
+
 	public static boolean ENABLE_WORLD = false;
 	public static boolean ENABLE_WORLD_BLACKLIST = false;
 	public static List<String> WORLD_LIST;

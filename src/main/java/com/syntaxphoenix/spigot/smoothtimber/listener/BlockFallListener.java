@@ -9,18 +9,19 @@ import com.syntaxphoenix.spigot.smoothtimber.utilities.PluginUtils;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 
 public class BlockFallListener implements Listener {
-	
+
 	@EventHandler
 	public void onChange(EntityChangeBlockEvent event) {
 		VersionChanger change = PluginUtils.CHANGER;
-		if(event.getEntityType() != change.getFallingBlockType()) {
+		if (event.getEntityType() != change.getFallingBlockType()) {
 			return;
 		}
 		FallingBlock block = (FallingBlock) event.getEntity();
-		if(!block.hasMetadata("STAnimate")) {
+		if (!block.hasMetadata("STAnimate")) {
 			return;
 		}
 		event.setCancelled(true);
+
 		change.dropItemByFallingBlock(block, block.getMetadata("STAnimate").get(0).asInt());
 		block.remove();
 	}

@@ -1,5 +1,9 @@
 package com.syntaxphoenix.spigot.smoothtimber.utilities;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -17,11 +21,14 @@ import net.md_5.bungee.api.ChatColor;
 
 public class PluginUtils {
 
-	public static PluginSettings SETTINGS = new PluginSettings();;
+	public static final BukkitScheduler SCHEDULER = Bukkit.getScheduler();
+	public static final PluginSettings SETTINGS = new PluginSettings();
+	
 	public static PluginUtils UTILS;
 	public static SmoothTimber MAIN;
 	public static VersionChanger CHANGER;
 	public static SyntaxPhoenixStats STATS;
+	
 
 	public static void setUp(SmoothTimber main) {
 		MAIN = main;
@@ -62,10 +69,31 @@ public class PluginUtils {
 	}
 
 	private void registerTasks() {
-		BukkitScheduler scheduler = Bukkit.getScheduler();
 
-		scheduler.runTaskTimerAsynchronously(MAIN, new ConfigTimer(), 20, 60);
+		SCHEDULER.runTaskTimerAsynchronously(MAIN, new ConfigTimer(), 20, 60);
 
+	}
+	
+	/*
+	 * Task Util
+	 */
+	
+	public static <E> E getObjectFromMainThread(Supplier<E> supply) {
+		return getObjectFromMainThread(supply, 50);
+	}
+	
+	public static <E> E getObjectFromMainThread(Supplier<E> supply, long wait) {
+		CountDownLatch latch = new CountDownLatch(1);
+		StoredObject<E> value = new StoredObject<>();
+		SCHEDULER.runTask(MAIN, () -> {
+			value.setObject(supply.get());
+		});
+		try {
+			latch.await(wait, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return value.getObject();
 	}
 
 	/*
