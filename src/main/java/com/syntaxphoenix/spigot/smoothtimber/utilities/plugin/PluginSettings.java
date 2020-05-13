@@ -34,11 +34,15 @@ public class PluginSettings {
 	}
 	
 	public PluginPackage getPackage(Plugin plugin) {
+		if(packages.isEmpty())
+			return null;
 		Optional<PluginPackage> option = searchPackage(plugin);
 		return option.isPresent() ? option.get() : null;
 	}
 	
 	public PluginPackage getPackage(String name) {
+		if(packages.isEmpty())
+			return null;
 		Optional<PluginPackage> option = searchPackage(name);
 		return option.isPresent() ? option.get() : null;
 	}

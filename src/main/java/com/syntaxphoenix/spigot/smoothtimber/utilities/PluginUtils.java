@@ -1,15 +1,20 @@
 package com.syntaxphoenix.spigot.smoothtimber.utilities;
 
+import static com.syntaxphoenix.spigot.smoothtimber.SmoothTimber.COMMANDS;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.syntaxphoenix.spigot.smoothtimber.SmoothTimber;
+import com.syntaxphoenix.spigot.smoothtimber.command.CommandRedirect;
+import com.syntaxphoenix.spigot.smoothtimber.command.commands.*;
 import com.syntaxphoenix.spigot.smoothtimber.config.*;
 import com.syntaxphoenix.spigot.smoothtimber.listener.*;
 import com.syntaxphoenix.spigot.smoothtimber.stats.SyntaxPhoenixStats;
@@ -39,6 +44,8 @@ public class PluginUtils {
 		CHANGER = VersionExchanger.getVersionChanger(VersionExchanger.getMinecraftVersion());
 		if (CHANGER != null) {
 			CutterConfig.load();
+			MessageConfig.load();
+			registerCommands();
 			registerListener();
 			registerTasks();
 			checkPlugins();
@@ -51,8 +58,8 @@ public class PluginUtils {
 	 */
 
 	private void checkPlugins() {
-		PluginManager pm = Bukkit.getPluginManager();
-		for (Plugin plugin : pm.getPlugins()) {
+		PluginManager pluginManager = Bukkit.getPluginManager();
+		for (Plugin plugin : pluginManager.getPlugins()) {
 			if (plugin == null)
 				continue;
 			if (plugin.getName().equals("BlockyLog")) {
@@ -62,10 +69,26 @@ public class PluginUtils {
 	}
 
 	private void registerListener() {
-		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new BlockBreakListener(), MAIN);
-		pm.registerEvents(new BlockFallListener(), MAIN);
-		pm.registerEvents(new PluginLoadListener(), MAIN);
+		PluginManager pluginManager = Bukkit.getPluginManager();
+		pluginManager.registerEvents(new BlockBreakListener(), MAIN);
+		pluginManager.registerEvents(new BlockFallListener(), MAIN);
+		pluginManager.registerEvents(new PluginLoadListener(), MAIN);
+	}
+	
+	private void registerCommands() {
+		CommandRedirect command = new CommandRedirect();
+		
+		PluginCommand plugin = MAIN.getCommand("smoothtimber");
+		plugin.setExecutor(command);
+		plugin.setTabCompleter(command);
+		
+		/*
+		 * 
+		 */
+		
+		COMMANDS.register(new HelpCommand(), "help", "?");
+		COMMANDS.register(new ToggleCommand(), "toggle");
+		
 	}
 
 	private void registerTasks() {

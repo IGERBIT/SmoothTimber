@@ -1,7 +1,7 @@
 main: com.syntaxphoenix.spigot.smoothtimber.SmoothTimber
 name: SmoothTimber
 author: Lauriichen
-version: pre-1.6.5
+version: 1.7
 api-version: 1.13
 softdepend: [BlockyLog]
 
@@ -10,7 +10,7 @@ commands:
         description: SmoothTimber main command
         aliases: [sm, stimb]
         permission: smoothtimber.use
-        usage: Something went wrong! Use /&lt;command&gt; to get more help
+        usage: &cSomething went wrong while running this command, please report this to developer.
         
 permissions:
     smoothtimber.*:

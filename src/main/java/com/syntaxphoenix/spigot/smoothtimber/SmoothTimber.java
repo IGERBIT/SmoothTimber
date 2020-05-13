@@ -9,28 +9,34 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.syntaxphoenix.spigot.smoothtimber.event.AsyncPlayerChopTreeEvent;
+import com.syntaxphoenix.spigot.smoothtimber.toggle.ToggleStorage;
 import com.syntaxphoenix.spigot.smoothtimber.utilities.PluginUtils;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
+import com.syntaxphoenix.syntaxapi.command.CommandManager;
 
 public class SmoothTimber extends JavaPlugin {
 	
-	public static SmoothTimber m;
-	
+	public static final CommandManager COMMANDS = new CommandManager();
+
+	public static SmoothTimber MAIN;
+	public static ToggleStorage STORAGE;
+
 	public void onLoad() {
-		m = this;
+		MAIN = this;
 	}
-	
+
 	public void onEnable() {
-		PluginUtils.setUp(m);
+		PluginUtils.setUp(MAIN);
+		STORAGE = new ToggleStorage(this);
 	}
-	
+
 	public void onDisable() {
 		Bukkit.getScheduler().cancelTasks(this);
 	}
 
-	public static boolean triggerChopEvent(Player p, Location l, VersionChanger change, ItemStack tool,
+	public static boolean triggerChopEvent(Player player, Location location, VersionChanger change, ItemStack tool,
 			ArrayList<Location> woodBlocks) {
-		AsyncPlayerChopTreeEvent event = new AsyncPlayerChopTreeEvent(p, l, change, tool, woodBlocks);
+		AsyncPlayerChopTreeEvent event = new AsyncPlayerChopTreeEvent(player, location, change, tool, woodBlocks);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.isCancelled();
 	}

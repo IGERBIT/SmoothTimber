@@ -10,13 +10,13 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 
 public class Reflector {
-	private static String svrVer;
+	private static String serverVersion;
 
 	public static String getServerVersion() {
-		if (svrVer == null) {
-			svrVer = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+		if (serverVersion == null) {
+			serverVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 		}
-		return svrVer;
+		return serverVersion;
 	}
 
 	private static final HashMap<String, Class<?>> cache = new HashMap<>();

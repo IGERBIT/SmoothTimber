@@ -56,7 +56,13 @@ public class v1_9xChanger implements VersionChanger {
 
 	@Override
 	public boolean isWoodBlock(Block block) {
-		String type = block.getType().name();
+		Material material = block.getType();
+		
+		if(CutterConfig.ENABLE_EXCLUSION)
+			if(CutterConfig.EXCLUDED_MATERIALS.contains(material))
+				return false;
+		
+		String type = material.name();
 		return (type.replace("_2", "").equals("LOG") || type.equals("FENCE"));
 	}
 

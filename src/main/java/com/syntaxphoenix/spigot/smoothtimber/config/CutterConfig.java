@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,17 +26,20 @@ public class CutterConfig {
 
 	public static int VERSION = 2;
 
-	public static int CHECK_RADIUS = 3;
+	public static int CHECK_RADIUS = 2;
 	public static List<String> CUTTER_MATERIALS = new ArrayList<>();
 
 	public static boolean ON_SNEAK = false;
-	public static boolean TOGGLEABLE = false;
+	public static boolean TOGGLEABLE = true;
 	public static boolean ENABLE_PERMISSIONS = false;
 
 	public static boolean ENABLE_UNBREAKING = true;
 
 	public static boolean ENABLE_LUCK = false;
 	public static double LUCK_MULTIPLIER = 1.0;
+
+	public static boolean ENABLE_EXCLUSION = false;
+	public static List<Material> EXCLUDED_MATERIALS = new ArrayList<>();
 
 	public static boolean ENABLE_WORLD = false;
 	public static boolean ENABLE_WORLD_BLACKLIST = false;
@@ -88,18 +92,51 @@ public class CutterConfig {
 		ENABLE_LUCK = check("enchantments.fortune.enabled", ENABLE_LUCK);
 		LUCK_MULTIPLIER = check("enchantments.fortune.multiplier", LUCK_MULTIPLIER);
 
+		ENABLE_EXCLUSION = check("exclusion.enabled", ENABLE_EXCLUSION);
+		EXCLUDED_MATERIALS = check("exclusion.list", EXCLUDED_MATERIALS);
+
 		ENABLE_WORLD = check("worlds.enabled", ENABLE_WORLD);
 		ENABLE_WORLD_BLACKLIST = check("worlds.blacklist", ENABLE_WORLD_BLACKLIST);
 		WORLD_LIST = check("worlds.list", worldStringList());
 
 		EXTENSION_BLOCKY = check("extensions.blockylog", EXTENSION_BLOCKY);
-
+		
+		/*
+		 * 
+		 */
+		
+		if(CHECK_RADIUS < 0) {
+			set("cutter.radius", CHECK_RADIUS = 1);
+		}
+		
 		/*
 		 * 
 		 */
 
 		save();
 		loaded = file.lastModified();
+	}
+
+	/*
+	 * 
+	 */
+
+	@SuppressWarnings("unchecked")
+	private static List<Material> check(String path, List<Material> input) {
+		if (cfg.contains(path)) {
+			List<String> list = (List<String>) get(path);
+			ArrayList<Material> output = new ArrayList<>();
+			for (String value : list)
+				output.add(Material.valueOf(value.toUpperCase()));
+			return output;
+		} else {
+			ArrayList<String> write = new ArrayList<>();
+			if (!input.isEmpty())
+				for (Material material : input)
+					write.add(material.name());
+			cfg.set(path, write);
+			return input;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -123,8 +160,11 @@ public class CutterConfig {
 
 	private static void set(String path, Object input) {
 		cfg.set(path, input);
-		save();
 	}
+
+	/*
+	 * 
+	 */
 
 	public static void save() {
 		try {

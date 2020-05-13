@@ -25,15 +25,17 @@ public class Locator {
 	public static void locateWood(Location start, List<Location> current) {
 		int radius = CutterConfig.CHECK_RADIUS;
 		PluginPackage pack = SETTINGS.getPackage("BlockyLog");
-		if (pack != null) {
-			checkCache(pack);
-			if (pack.getVersion() == 1) {
-				locateBlocky1(pack.getCache(), start, radius, current);
-			} else if (pack.getVersion() == 2) {
-				locateBlocky2(pack.getCache(), start, radius, current);
-			}
-		} else {
+
+		if (pack == null) {
 			locateOnly(start, radius, current);
+			return;
+		}
+
+		checkCache(pack);
+		if (pack.getVersion() == 1) {
+			locateBlocky1(pack.getCache(), start, radius, current);
+		} else if (pack.getVersion() == 2) {
+			locateBlocky2(pack.getCache(), start, radius, current);
 		}
 	}
 
@@ -51,7 +53,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
+				if (change.isWoodBlock(l.getBlock())) {
 					if (current.contains(l)) {
 						continue;
 					}
@@ -82,7 +84,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
+				if (change.isWoodBlock(l.getBlock())) {
 					Chunk c = l.getChunk();
 					if ((boolean) wref.run(bw, "contains", c.getX(), c.getZ())) {
 						Object bc = wref.run(bw, "chunk", c.getX(), c.getZ());
@@ -119,7 +121,7 @@ public class Locator {
 					checkLoc = false;
 				}
 				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(PluginUtils.getObjectFromMainThread(() -> l.getBlock()))) {
+				if (change.isWoodBlock(l.getBlock())) {
 					if ((boolean) apiref.run(api, "placed", l)) {
 						continue;
 					}
@@ -137,24 +139,26 @@ public class Locator {
 
 	public static boolean isPlayerPlaced(Location location) {
 		PluginPackage pack = SETTINGS.getPackage("BlockyLog");
-		if (pack != null) {
-			int version = pack.getVersion();
-			checkCache(pack);
-			if (version == 1) {
-				AbstractReflect wref = pack.getCache().get("world").get();
-				AbstractReflect cref = pack.getCache().get("chunk").get();
-				Chunk chunk = location.getChunk();
-				Object world = wref.run("get", location.getWorld());
-				if (!(boolean) wref.run(world, "contains", chunk.getX(), chunk.getZ())) {
-					return false;
-				}
-				return (boolean) cref.run(wref.run(world, "get", chunk.getX(), chunk.getZ()), "contains",
-						location.getBlockX() - chunk.getX() * 16, location.getBlockY(),
-						location.getBlockZ() - chunk.getZ() * 16);
-			} else if (version == 2) {
-				AbstractReflect apiref = pack.getCache().get("api").get();
-				return (boolean) apiref.run(apiref.run("api"), "placed", location);
+
+		if (pack == null)
+			return false;
+
+		int version = pack.getVersion();
+		checkCache(pack);
+		if (version == 1) {
+			AbstractReflect wref = pack.getCache().get("world").get();
+			AbstractReflect cref = pack.getCache().get("chunk").get();
+			Chunk chunk = location.getChunk();
+			Object world = wref.run("get", location.getWorld());
+			if (!(boolean) wref.run(world, "contains", chunk.getX(), chunk.getZ())) {
+				return false;
 			}
+			return (boolean) cref.run(wref.run(world, "get", chunk.getX(), chunk.getZ()), "contains",
+					location.getBlockX() - chunk.getX() * 16, location.getBlockY(),
+					location.getBlockZ() - chunk.getZ() * 16);
+		} else if (version == 2) {
+			AbstractReflect apiref = pack.getCache().get("api").get();
+			return (boolean) apiref.run(apiref.run("api"), "placed", location);
 		}
 		return false;
 	}

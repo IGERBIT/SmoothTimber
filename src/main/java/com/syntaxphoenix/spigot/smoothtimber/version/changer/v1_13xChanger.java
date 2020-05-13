@@ -61,7 +61,13 @@ public class v1_13xChanger implements VersionChanger {
 
 	@Override
 	public boolean isWoodBlock(Block block) {
-		String type = block.getBlockData().getMaterial().name();
+		Material material = block.getBlockData().getMaterial();
+		
+		if(CutterConfig.ENABLE_EXCLUSION)
+			if(CutterConfig.EXCLUDED_MATERIALS.contains(material))
+				return false;
+		
+		String type = material.name();
 		return (type.endsWith("_LOG") || type.endsWith("_WOOD") || type.endsWith("_FENCE"));
 	}
 

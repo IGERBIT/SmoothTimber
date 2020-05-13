@@ -5,7 +5,7 @@
 
 	<groupId>com.syntaxphoenix.spigot</groupId>
 	<artifactId>SmoothTimber</artifactId>
-	<version>pre-1.6.5</version>
+	<version>1.7</version>
 	<name>SmoothTimber</name>
 	<packaging>jar</packaging>
 
@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>com.github.SyntaxPhoenix</groupId>
 			<artifactId>syntax-api</artifactId>
-			<version>0a7798bf79</version>
+			<version>6d1e0d157b</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.yaml</groupId>

@@ -26,8 +26,8 @@ public class SyntaxPhoenixStats {
 	
 	private static final String URL = "http://stats.syntaxphoenix.com/submit/?type=bukkit";
 	
-	private File f = new File("plugins/SyntaxPhoenixStats", "config.yml");
-	private FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
+	private File file = new File("plugins/SyntaxPhoenixStats", "config.yml");
+	private FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 	
 	private final JavaPlugin plugin;
 	private String service_id;
@@ -41,22 +41,22 @@ public class SyntaxPhoenixStats {
         }
 		this.plugin = plugin;
 		this.service_id = service_id;
-		cfg.addDefault("enabled", true);
-		cfg.addDefault("ServerUUID", UUID.randomUUID().toString());
-		cfg.addDefault("Logging", false);
-		cfg.options().header("SyntaxPhoenixStats collects some data for SyntaxPhoenix to give you an better experience. \n" +
+		config.addDefault("enabled", true);
+		config.addDefault("ServerUUID", UUID.randomUUID().toString());
+		config.addDefault("Logging", false);
+		config.options().header("SyntaxPhoenixStats collects some data for SyntaxPhoenix to give you an better experience. \n" +
 							 "This software has nearly no effect on the server performance!\n" +
 							 "For more Infos check out https://stats.syntaxphoenix.com").copyDefaults(true);
 		try {
-			cfg.save(f);
+			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		serverUUID = cfg.getString("ServerUUID");
-		logging = cfg.getBoolean("Logging");
+		serverUUID = config.getString("ServerUUID");
+		logging = config.getBoolean("Logging");
 		
-        if (cfg.getBoolean("enabled") == true) {
+        if (config.getBoolean("enabled") == true) {
             boolean found = false;
             
             for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {

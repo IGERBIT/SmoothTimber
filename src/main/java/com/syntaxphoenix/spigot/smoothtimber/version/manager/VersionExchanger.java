@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.syntaxphoenix.spigot.smoothtimber.utilities.PluginUtils;
-import com.syntaxphoenix.spigot.smoothtimber.utilities.Strings;
 import com.syntaxphoenix.spigot.smoothtimber.version.changer.*;
+import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public class VersionExchanger {
 

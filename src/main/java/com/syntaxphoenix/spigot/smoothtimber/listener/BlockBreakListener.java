@@ -25,64 +25,68 @@ public class BlockBreakListener implements Listener {
 
 	private final RandomNumberGenerator generator = NumberGeneratorType.MURMUR.create(System.currentTimeMillis() >> 3);
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onBlockBreak(BlockBreakEvent e) {
-		if (e.isCancelled()) {
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 
 		if (CutterConfig.ENABLE_WORLD) {
-			boolean contains = CutterConfig.WORLD_LIST.contains(e.getBlock().getWorld().getName());
+			boolean contains = CutterConfig.WORLD_LIST.contains(event.getBlock().getWorld().getName());
 			if (CutterConfig.ENABLE_WORLD_BLACKLIST ? contains : !contains)
 				return;
 		}
 
-		Player p = e.getPlayer();
-		if (CutterConfig.ON_SNEAK) {
-			if (!p.isSneaking()) {
+		Player player = event.getPlayer();
+
+		if (CutterConfig.ON_SNEAK)
+			if (!player.isSneaking())
 				return;
-			}
-		}
+
+		if (CutterConfig.TOGGLEABLE)
+			if (!SmoothTimber.STORAGE.hasToggled(player.getUniqueId()))
+				return;
+
 		VersionChanger change = PluginUtils.CHANGER;
-		if (change.isWoodBlock(e.getBlock())) {
-			if (change.hasCuttingItemInHand(p)) {
-				ItemStack tool = change.getItemInHand(p);
-				Location l = e.getBlock().getLocation();
-				if (Locator.isPlayerPlaced(l)) {
+		if (change.isWoodBlock(event.getBlock())) {
+			if (change.hasCuttingItemInHand(player)) {
+				ItemStack tool = change.getItemInHand(player);
+				Location location = event.getBlock().getLocation();
+				if (Locator.isPlayerPlaced(location)) {
 					return;
 				}
-				e.setCancelled(true);
+				event.setCancelled(true);
 				Bukkit.getScheduler().runTaskAsynchronously(PluginUtils.MAIN, new Runnable() {
 					@Override
 					public void run() {
 						int maxItems = CutterConfig.ENABLE_LUCK ? change.getMaxDropCount(tool) : 1;
 						ArrayList<Location> woodBlocks = new ArrayList<>();
-						Location bl = l;
-						int prev = woodBlocks.size();
+						Location blockLocation = location;
+						int previous = woodBlocks.size();
 						for (int y = 0; y < 256; y++) {
-							Locator.locateWood(
-									new Location(bl.getWorld(), bl.getBlockX(), bl.getBlockY() + y, bl.getBlockZ()),
-									woodBlocks);
+							Locator.locateWood(new Location(blockLocation.getWorld(), blockLocation.getBlockX(),
+									blockLocation.getBlockY() + y, blockLocation.getBlockZ()), woodBlocks);
 							int size = woodBlocks.size();
-							if (size == prev) {
+							if (size == previous) {
 								break;
 							}
-							prev = size;
+							previous = size;
 						}
-						if (SmoothTimber.triggerChopEvent(p, l, change, tool, woodBlocks)) {
+						if (SmoothTimber.triggerChopEvent(player, location, change, tool, woodBlocks)) {
 							return;
 						}
 						Bukkit.getScheduler().runTask(PluginUtils.MAIN, new Runnable() {
 							@Override
 							public void run() {
-								for (int v = 0; v < woodBlocks.size(); v++) {
-									Block b = woodBlocks.get(v).getBlock();
-									if (change.hasPermissionForWood(p, b)) {
+								for (int index = 0; index < woodBlocks.size(); index++) {
+									Block block = woodBlocks.get(index).getBlock();
+									if (change.hasPermissionForWood(player, block)) {
 										if (change.removeDurabilityFromItem(tool) == null) {
 											break;
 										}
-										change.toFallingBlock(b).setMetadata("STAnimate", new FixedMetadataValue(
-												SmoothTimber.m, maxItems == 1 ? maxItems : generateAmount(maxItems)));
+										change.toFallingBlock(block).setMetadata("STAnimate",
+												new FixedMetadataValue(SmoothTimber.MAIN,
+														maxItems == 1 ? maxItems : generateAmount(maxItems)));
 										;
 									}
 								}
