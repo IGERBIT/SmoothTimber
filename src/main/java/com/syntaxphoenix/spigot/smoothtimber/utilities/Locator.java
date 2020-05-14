@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import com.syntaxphoenix.spigot.smoothtimber.config.CutterConfig;
 import com.syntaxphoenix.spigot.smoothtimber.utilities.plugin.PluginPackage;
@@ -38,6 +39,10 @@ public class Locator {
 			locateBlocky2(pack.getCache(), start, radius, current);
 		}
 	}
+	
+	private static Block getBlock(Location location) {
+		return CutterConfig.SYNC_BLOCK_DETECTION ? PluginUtils.getObjectFromMainThread(() -> location.getBlock()) : location.getBlock();
+	}
 
 	private static void locateOnly(Location start, int radius, List<Location> current) {
 		VersionChanger change = PluginUtils.CHANGER;
@@ -52,14 +57,14 @@ public class Locator {
 				if (cx == x && cz == z) {
 					checkLoc = false;
 				}
-				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
-					if (current.contains(l)) {
+				Location location = new Location(w, cx, y, cz);
+				if (change.isWoodBlock(getBlock(location))) {
+					if (current.contains(location)) {
 						continue;
 					}
-					current.add(l);
+					current.add(location);
 					if (checkLoc) {
-						locateOnly(l, radius, current);
+						locateOnly(location, radius, current);
 					}
 				}
 			}
@@ -83,21 +88,21 @@ public class Locator {
 				if (cx == x && cz == z) {
 					checkLoc = false;
 				}
-				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
-					Chunk c = l.getChunk();
-					if ((boolean) wref.run(bw, "contains", c.getX(), c.getZ())) {
-						Object bc = wref.run(bw, "chunk", c.getX(), c.getZ());
-						if ((boolean) cref.run(bc, "contains", cx, y, cz)) {
+				Location location = new Location(w, cx, y, cz);
+				if (change.isWoodBlock(getBlock(location))) {
+					Chunk chunk = location.getChunk();
+					if ((boolean) wref.run(bw, "contains", chunk.getX(), chunk.getZ())) {
+						Object blockyChunk = wref.run(bw, "chunk", chunk.getX(), chunk.getZ());
+						if ((boolean) cref.run(blockyChunk, "contains", cx, y, cz)) {
 							continue;
 						}
 					}
-					if (current.contains(l)) {
+					if (current.contains(location)) {
 						continue;
 					}
-					current.add(l);
+					current.add(location);
 					if (checkLoc) {
-						locateBlocky1(cache, l, radius, current);
+						locateBlocky1(cache, location, radius, current);
 					}
 				}
 			}
@@ -120,17 +125,17 @@ public class Locator {
 				if (cx == x && cz == z) {
 					checkLoc = false;
 				}
-				Location l = new Location(w, cx, y, cz);
-				if (change.isWoodBlock(l.getBlock())) {
-					if ((boolean) apiref.run(api, "placed", l)) {
+				Location location = new Location(w, cx, y, cz);
+				if (change.isWoodBlock(getBlock(location))) {
+					if ((boolean) apiref.run(api, "placed", location)) {
 						continue;
 					}
-					if (current.contains(l)) {
+					if (current.contains(location)) {
 						continue;
 					}
-					current.add(l);
+					current.add(location);
 					if (checkLoc) {
-						locateBlocky2(cache, l, radius, current);
+						locateBlocky2(cache, location, radius, current);
 					}
 				}
 			}

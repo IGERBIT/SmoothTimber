@@ -32,6 +32,7 @@ public class CutterConfig {
 	public static boolean ON_SNEAK = false;
 	public static boolean TOGGLEABLE = true;
 	public static boolean ENABLE_PERMISSIONS = false;
+	public static boolean SYNC_BLOCK_DETECTION = false;
 
 	public static boolean ENABLE_UNBREAKING = true;
 
@@ -86,6 +87,7 @@ public class CutterConfig {
 		ON_SNEAK = check("options.cutter.sneak", ON_SNEAK);
 		TOGGLEABLE = check("options.cutter.toggleable", TOGGLEABLE);
 		ENABLE_PERMISSIONS = check("options.cutter.permissions", ENABLE_PERMISSIONS);
+		SYNC_BLOCK_DETECTION = check("options.cutter.sync-detection", SYNC_BLOCK_DETECTION);
 
 		ENABLE_UNBREAKING = check("enchantments.unbreaking.enabled", ENABLE_UNBREAKING);
 

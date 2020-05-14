@@ -110,6 +110,7 @@ public class PluginUtils {
 		StoredObject<E> value = new StoredObject<>();
 		SCHEDULER.runTask(MAIN, () -> {
 			value.setObject(supply.get());
+			latch.countDown();
 		});
 		try {
 			latch.await(wait, TimeUnit.MILLISECONDS);
