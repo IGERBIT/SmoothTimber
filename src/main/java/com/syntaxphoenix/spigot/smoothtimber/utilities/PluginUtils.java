@@ -39,10 +39,10 @@ public class PluginUtils {
 	}
 
 	public PluginUtils() {
+		MessageConfig.load();
 		CHANGER = VersionExchanger.getVersionChanger(VersionExchanger.getMinecraftVersion());
 		if (CHANGER != null) {
 			CutterConfig.load();
-			MessageConfig.load();
 			registerCommands();
 			registerListener();
 			registerTasks();
