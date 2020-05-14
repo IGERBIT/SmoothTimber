@@ -6,17 +6,17 @@ public enum Message {
 
 	// Global
 	GLOBAL_PREFIX("&5Smooth&dTimber &8||"),
-	GLOBAL_LIST222SPLIT("&7, &a"),
+	GLOBAL_LIST222SPLIT("&7, &d"),
 
 	// Reload
-	RELOAD_NEEDED("&7Detected a %type0% change, &ereloading %type1%&7..."),
-	RELOAD_DONE("&7%type% reloaded &asuccessfully!"),
+	RELOAD_NEEDED("&7Detected a %type0% change, &5reloading %type1%&7..."),
+	RELOAD_DONE("&7%type% reloaded &dsuccessfully!"),
 	
 	// Version
-	VERSION_SUPPORTED("&7You're currently using the &asupported&7 Minecraft Version &a%minecraft% &7(&2Core %core%&7)"),
-	VERSION_UNSUPPORTED("&7You're currently using the &4unsupported&7 Minecraft Version &4%minecraft%"),
+	VERSION_SUPPORTED("&7You're currently using the &dsupported&7 Minecraft Version &d%minecraft% &7(&5Core %core%&7)"),
+	VERSION_UNSUPPORTED("&7You're currently using the &cunsupported&7 Minecraft Version &4%minecraft%"),
 	VERSION_NEED222UPDATE("&7If you want to use &5Smooth&dTimber &7you need to update your server to a supported Minecraft Version"),
-	VERSION_VERSIONS("&7Supported Versions are: &a%versions%"),
+	VERSION_VERSIONS("&7Supported Versions are: &d%versions%"),
 
 	// Types
 	TYPE_MESSAGE("message"), TYPE_MESSAGES("messages"), TYPE_SETTING("setting"), TYPE_SETTINGS("settings"),
@@ -28,16 +28,16 @@ public enum Message {
 	TOOLS_WOODCHOPPER("woodchopper"),
 
 	// Toggle
-	TOGGLE_ON_FOREVER("&7You enabled your &a%tool%&7!"),
-	TOGGLE_ON_TIMED("&7You enabled your &a%tool% &7for &2%time%&7!"),
+	TOGGLE_ON_FOREVER("&7You enabled your &d%tool%&7!"),
+	TOGGLE_ON_TIMED("&7You enabled your &d%tool% &7for &2%time%&7!"),
 	TOGGLE_OFF("&7You disabled your &c%tool%&7!"),
 	TOGGLE_DISABLED("&7Toggling is disabled!"),
 	
 	// Command
-	COMMAND_ONLY_PLAYER("&7Only a &cplayer &7can run this command!"), 
+	COMMAND_ONLY_PLAYER("&7Only a &5player &7can run this command!"), 
 	COMMAND_WIP("&7This command is work in progress!"), 
 	COMMAND_NON222EXISTENT("&7This command doesn't exist!"),
-	COMMAND_MISSING222PERMISSION("&7You're lacking the permission &c%permission &7to execute this command!"),
+	COMMAND_MISSING222PERMISSION("&7You're lacking the permission &5%permission &7to execute this command!"),
 
 	/*
 	 * 
