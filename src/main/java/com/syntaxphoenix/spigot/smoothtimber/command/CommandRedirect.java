@@ -24,14 +24,14 @@ public class CommandRedirect implements CommandExecutor, TabCompleter {
 	public boolean onCommand(CommandSender sender, Command ignore, String alias, String[] args) {
 		
 		if(args.length == 0) {
-			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.COMMAND_NONEXISTENT.colored());
+			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.COMMAND_NON222EXISTENT.colored());
 			return true;
 		}
 
 		CommandProcess process = prepare(sender, args);
 		
 		if(!process.isValid()) {
-			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.COMMAND_NONEXISTENT.colored());
+			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.COMMAND_NON222EXISTENT.colored());
 			return true;
 		}
 		

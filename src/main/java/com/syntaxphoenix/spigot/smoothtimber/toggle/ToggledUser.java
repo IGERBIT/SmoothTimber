@@ -61,13 +61,13 @@ public class ToggledUser {
 
 		if (status)
 			player.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + (time == -1
-					? Message.TOGGLE_ON_FOREVER.colored(new String[] { "%tool", Message.TOOLS_WOODCHOPPER.message() })
-					: Message.TOGGLE_ON_TIMED.colored(new String[][] { { "%tool", Message.TOOLS_WOODCHOPPER.message() },
-							{ "%time", time + " " + (time == 1 ? Message.TIME_SECOND.message()
+					? Message.TOGGLE_ON_FOREVER.colored(new String[] { "%tool%", Message.TOOLS_WOODCHOPPER.message() })
+					: Message.TOGGLE_ON_TIMED.colored(new String[][] { { "%tool%", Message.TOOLS_WOODCHOPPER.message() },
+							{ "%time%", time + " " + (time == 1 ? Message.TIME_SECOND.message()
 									: Message.TIME_SECONDS.message()) } })));
 		else
 			player.sendMessage(Message.GLOBAL_PREFIX.colored() + ' '
-					+ Message.TOGGLE_OFF.colored(new String[] { "%tool", Message.TOOLS_WOODCHOPPER.message() }));
+					+ Message.TOGGLE_OFF.colored(new String[] { "%tool%", Message.TOOLS_WOODCHOPPER.message() }));
 
 	}
 

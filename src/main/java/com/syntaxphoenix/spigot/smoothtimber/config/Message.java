@@ -6,10 +6,17 @@ public enum Message {
 
 	// Global
 	GLOBAL_PREFIX("&5Smooth&dTimber &8||"),
+	GLOBAL_LIST222SPLIT("&7, &a"),
 
 	// Reload
-	RELOAD_NEEDED("&7Detected a %type0 change, &ereloading %type1&7..."),
-	RELOAD_DONE("&7%type reloaded &asuccessfully!"),
+	RELOAD_NEEDED("&7Detected a %type0% change, &ereloading %type1%&7..."),
+	RELOAD_DONE("&7%type% reloaded &asuccessfully!"),
+	
+	// Version
+	VERSION_SUPPORTED("&7You're currently using the &asupported&7 Minecraft Version &a%minecraft% &7(&2Core %core%&7)"),
+	VERSION_UNSUPPORTED("&7You're currently using the &4unsupported&7 Minecraft Version &4%minecraft%"),
+	VERSION_NEED222UPDATE("&7If you want to use &5Smooth&dTimber &7you need to update your server to a supported Minecraft Version"),
+	VERSION_VERSIONS("&7Supported Versions are: &a%versions%"),
 
 	// Types
 	TYPE_MESSAGE("message"), TYPE_MESSAGES("messages"), TYPE_SETTING("setting"), TYPE_SETTINGS("settings"),
@@ -21,15 +28,16 @@ public enum Message {
 	TOOLS_WOODCHOPPER("woodchopper"),
 
 	// Toggle
-	TOGGLE_ON_FOREVER("&7You enabled your &a%tool&7!"),
-	TOGGLE_ON_TIMED("&7You enabled your &a%tool &7for &2%time&7!"),
-	TOGGLE_OFF("&7You disabled your &c%tool&7!"),
+	TOGGLE_ON_FOREVER("&7You enabled your &a%tool%&7!"),
+	TOGGLE_ON_TIMED("&7You enabled your &a%tool% &7for &2%time%&7!"),
+	TOGGLE_OFF("&7You disabled your &c%tool%&7!"),
 	TOGGLE_DISABLED("&7Toggling is disabled!"),
 	
 	// Command
-	COMMAND_ONLY_PLAYER("&7Only a &dplayer &7can run this command!"), 
+	COMMAND_ONLY_PLAYER("&7Only a &cplayer &7can run this command!"), 
 	COMMAND_WIP("&7This command is work in progress!"), 
-	COMMAND_NONEXISTENT("&7This command doesn't exist!"),
+	COMMAND_NON222EXISTENT("&7This command doesn't exist!"),
+	COMMAND_MISSING222PERMISSION("&7You're lacking the permission &c%permission &7to execute this command!"),
 
 	/*
 	 * 
@@ -55,7 +63,7 @@ public enum Message {
 	 */
 
 	public final String id() {
-		return name().toLowerCase().replace('_', '.');
+		return name().toLowerCase().replace('_', '.').replace("222", "-");
 	}
 
 	/*
@@ -99,7 +107,7 @@ public enum Message {
 	 */
 
 	public static final Message fromId(String id) {
-		return valueOf(id.replace('.', '_').toUpperCase());
+		return valueOf(id.replace("-", "222").replace('.', '_').toUpperCase());
 	}
 
 }

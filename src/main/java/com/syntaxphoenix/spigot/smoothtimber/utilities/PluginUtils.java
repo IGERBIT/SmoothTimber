@@ -22,8 +22,6 @@ import com.syntaxphoenix.spigot.smoothtimber.utilities.plugin.PluginSettings;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionChanger;
 import com.syntaxphoenix.spigot.smoothtimber.version.manager.VersionExchanger;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class PluginUtils {
 
 	public static final BukkitScheduler SCHEDULER = Bukkit.getScheduler();
@@ -125,7 +123,7 @@ public class PluginUtils {
 	 */
 
 	public static void sendConsoleMessage(String message) {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+		Bukkit.getConsoleSender().sendMessage(message);
 	}
 
 }

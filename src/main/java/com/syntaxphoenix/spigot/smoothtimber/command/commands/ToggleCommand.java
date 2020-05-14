@@ -26,6 +26,11 @@ public class ToggleCommand extends SmoothCommand {
 			return;
 		}
 		
+		if(!sender.hasPermission("smoothtimber.toggle")) {
+			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.COMMAND_MISSING222PERMISSION.colored(new String[] {"%permission%", "smoothtimber.toggle"}));
+			return;
+		}
+		
 		if(!CutterConfig.TOGGLEABLE) {
 			sender.sendMessage(Message.GLOBAL_PREFIX.colored() + ' ' + Message.TOGGLE_DISABLED.colored());
 			return;
